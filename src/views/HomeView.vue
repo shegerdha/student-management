@@ -1,9 +1,13 @@
-<script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+<script lang="ts" setup>
+
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
+  <main class="mt-20 rtl-direction">
+    به سامانه نمایش اطلاعات دانشجویان خوش آمدید.
   </main>
 </template>
+
+<style scoped>
+
+</style>
