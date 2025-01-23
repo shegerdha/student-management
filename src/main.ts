@@ -1,23 +1,25 @@
 import "./assets/main.css";
 
-import {createApp} from "vue";
-import {createPinia} from "pinia";
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
 import App from "./App.vue";
 import router from "./router";
 
 // Vuetify
 import "vuetify/styles";
-import {createVuetify} from "vuetify";
+import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import lightTheme from "./themes/lightTheme";
+import darkTheme from "./themes/darkTheme";
 
 const app = createApp(App);
 const vuetify = createVuetify({
-    components,
-    directives,
+  components,
+  directives,
+  theme: { themes: { light: lightTheme, dark: darkTheme } },
 });
-
 
 app.use(vuetify);
 app.use(createPinia());
