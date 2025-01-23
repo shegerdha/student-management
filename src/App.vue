@@ -1,21 +1,15 @@
 <script lang="ts" setup>
 import { RouterLink, RouterView } from "vue-router";
 import MainAppBar from "@/components/MainAppBar.vue";
+import NavigationDrawer from "@/components/NavigationDrawer.vue";
 </script>
 
 <template>
   <v-app theme="light">
     <header>
       <MainAppBar />
-      <v-main>
-        <div class="wrapper">
-          <nav>
-            <RouterLink to="/">صفحه اصلی</RouterLink>
-            <RouterLink to="/about">درباره ما</RouterLink>
-            <RouterLink to="/students-management">لیست دانشجویان</RouterLink>
-          </nav>
-        </div>
-      </v-main>
+      <NavigationDrawer />
+      <v-main> content here </v-main>
     </header>
     <RouterView />
   </v-app>
