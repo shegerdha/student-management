@@ -2,16 +2,27 @@
 import { RouterLink, RouterView } from "vue-router";
 import MainAppBar from "@/components/MainAppBar.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
+
+import { ref } from "vue";
+import links from "./routes/mainLinks";
+
+const isDrawerOpen = ref(false);
+
+const toggleDrawer = () => {
+  debugger;
+  isDrawerOpen.value = !isDrawerOpen.value;
+};
 </script>
 
 <template>
   <v-app theme="light">
     <header>
-      <MainAppBar />
-      <NavigationDrawer />
-      <v-main> content here </v-main>
+      <MainAppBar @toggleDrawer="toggleDrawer" />
+      <NavigationDrawer v-model="isDrawerOpen" />
     </header>
-    <RouterView />
+    <v-main>
+      <RouterView />
+    </v-main>
   </v-app>
 </template>
 

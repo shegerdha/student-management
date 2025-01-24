@@ -1,7 +1,12 @@
+<script lang="ts" setup>
+const emit = defineEmits(["toggleDrawer"]);
+console.log("emit", emit);
+</script>
+
 <template>
   <v-app-bar color="primary" density="compact">
     <template v-slot:prepend>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="emit('toggleDrawer')"></v-app-bar-nav-icon>
     </template>
 
     <v-app-bar-title>Photos</v-app-bar-title>
@@ -11,7 +16,5 @@
     </template>
   </v-app-bar>
 </template>
-
-<script lang="ts" setup></script>
 
 <style scoped></style>
