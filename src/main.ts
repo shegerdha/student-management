@@ -2,6 +2,7 @@ import "./assets/main.css";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import piniaPersist from "pinia-plugin-persistedstate";
 
 import App from "./App.vue";
 import router from "./router";
@@ -23,8 +24,11 @@ const vuetify = createVuetify({
   theme: { themes: { light: lightTheme, dark: darkTheme } },
 });
 
+const pinia = createPinia();
+pinia.use(piniaPersist);
+
 app.use(vuetify);
-app.use(createPinia());
+app.use(pinia);
 app.use(router);
 
 app.mount("#app");
