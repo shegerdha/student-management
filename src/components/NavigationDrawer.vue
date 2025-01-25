@@ -16,7 +16,12 @@ const allLinks = ref(links);
             :key="link.path"
             :to="link.path"
           >
-            <v-list-item-title>{{ link.label }}</v-list-item-title>
+            <div class="flex flex-row gap-2">
+              <v-list-item-media>
+                <v-icon icon="mdi-link" />
+              </v-list-item-media>
+              <v-list-item-title>{{ link.label }}</v-list-item-title>
+            </div>
           </v-list-item>
         </div>
       </v-layout>
