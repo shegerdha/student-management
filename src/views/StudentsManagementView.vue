@@ -1,15 +1,28 @@
-<script setup>
+<script lang="ts" setup>
 import { ref, reactive } from "vue";
 import { useForm, Field, ErrorMessage, Form as VForm } from "vee-validate";
 import { boolean, object, string } from "yup";
 import { toTypedSchema } from "@vee-validate/yup";
-import { useStudentsStore } from "../stores/students.ts";
+import { useStudentsStore } from "@/stores/students";
+import EditDialog from "@/views/dialogs/studentManagement/EditDialog.vue";
+import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
 
 const studentsStore = useStudentsStore();
 const students = studentsStore.students;
 
 const isModalOpen = ref(false);
 const modalMode = ref("create");
+const search = ref("");
+const selected = ref([]);
+const headers = ref([
+  { key: "id", title: "ردیف" },
+  { key: "fullName", title: "نام و نام خانوادگی" },
+  { key: "studentId", title: "شماره دانشجویی" },
+  { key: "email", title: "ایمیل" },
+  { key: "active", title: "فعال" },
+  { key: "birthDate", title: "تاریخ تولد" },
+  { key: "operations", title: "عملیات" },
+]);
 const formData = reactive({
   id: 0,
   fullName: "",
@@ -44,7 +57,7 @@ const closeModal = () => {
 const handleSubmit = (values) => {
   if (modalMode.value === "create") {
     studentsStore.add({ ...values, id: Date.now() });
-  } else if (modalMode.value === "edit") {
+  } else if (modalMode.value === "EditDialog") {
     studentsStore.edit(values);
   }
   closeModal();
@@ -67,143 +80,53 @@ const { resetForm } = useForm({
 </script>
 
 <template>
-  <div>
-    <h1 class="text-xl font-bold mb-4">جدول اطلاعات</h1>
-    <button
-      class="bg-blue-500 text-white px-4 py-2 rounded mb-4"
-      @click="openModal('create')"
-    >
-      افزودن دانشجو
-    </button>
-    <v-data-table
-      :items="students"
-      class="w-full border-collapse border border-gray-300"
-    >
-      <thead>
-        <tr class="bg-gray-100">
-          <th>ردیف</th>
-          <th>نام و نام خانوادگی</th>
-          <th>شماره دانشجویی</th>
-          <th>ایمیل</th>
-          <th>فعال/غیر فعال</th>
-          <th>تاریخ تولد</th>
-          <th>عملیات</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(student, index) in students"
-          :key="student.id"
-          class="text-center"
-        >
-          <td>{{ index + 1 }}</td>
-          <td>{{ student.fullName }}</td>
-          <td>{{ student.studentId }}</td>
-          <td>{{ student.email }}</td>
-          <td>{{ student.active ? "فعال" : "غیر فعال" }}</td>
-          <td>{{ student.birthDate }}</td>
-          <td>
-            <button
-              class="bg-yellow-500 text-white px-3 py-1 rounded mx-1"
-              @click="openModal('edit', student)"
-            >
-              ویرایش
-            </button>
-            <button
-              class="bg-red-500 text-white px-3 py-1 rounded mx-1"
-              @click="openModal('edit', student)"
-            >
-              حذف
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </v-data-table>
-
-    <div
-      v-if="isModalOpen"
-      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
-    >
-      <div class="bg-white p-6 rounded w-1/3">
-        <h2 class="text-lg font-bold mb-4">
-          {{ modalMode === "create" ? "افزودن دانشجو" : "ویرایش دانشجو" }}
-        </h2>
-        <VForm @submit="handleSubmit">
-          <div class="mb-4">
-            <label class="block mb-1">نام و نام خانوادگی:</label>
-            <Field
-              v-model="formData.fullName"
-              as="input"
-              class="w-full border px-2 py-1 rounded"
-              name="fullName"
-            />
-            <ErrorMessage class="text-red-500 text-sm" name="fullName" />
-          </div>
-          <div class="mb-4">
-            <label class="block mb-1">شماره دانشجویی:</label>
-            <Field
-              v-model="formData.studentId"
-              as="input"
-              class="w-full border px-2 py-1 rounded"
-              name="studentId"
-            />
-            <ErrorMessage class="text-red-500 text-sm" name="studentId" />
-          </div>
-          <div class="mb-4">
-            <label class="block mb-1">ایمیل:</label>
-            <Field
-              v-model="formData.email"
-              as="input"
-              class="w-full border px-2 py-1 rounded"
-              name="email"
-            />
-            <ErrorMessage class="text-red-500 text-sm" name="email" />
-          </div>
-          <div class="mb-4">
-            <!--            <label class="block mb-1">فعال یا غیر فعال:</label>-->
-            <v-checkbox
-              v-model="formData.active"
-              class="w-full border px-2 py-1 rounded"
-              label="فعال"
-            />
-            <!--            <Field v-model="formData.active" as="select" name="active">-->
-            <!--              <option :value="true">فعال</option>-->
-            <!--              <option :value="false">غیر فعال</option>-->
-            <!--            </Field>-->
-            <ErrorMessage class="text-red-500 text-sm" name="active" />
-          </div>
-          <div class="mb-4">
-            <label class="block mb-1">تاریخ تولد:</label>
-            <Vue3PersianDatetimePicker
-              v-model="formData.birthDate"
-              name="birthDate"
-            />
-            <!--            <Field-->
-            <!--              v-model="formData.birthDate"-->
-            <!--              as="input"-->
-            <!--              class="w-full border px-2 py-1 rounded"-->
-            <!--              name="birthDate"-->
-            <!--              type="date"-->
-            <!--            />-->
-            <ErrorMessage class="text-red-500 text-sm" name="birthDate" />
-          </div>
-          <div class="flex justify-end">
-            <button
-              class="bg-gray-400 text-white px-4 py-2 rounded mr-2"
-              type="button"
-              @click="closeModal"
-            >
-              انصراف
-            </button>
-            <button
-              class="bg-blue-500 text-white px-4 py-2 rounded"
-              type="submit"
-            >
-              ذخیره
-            </button>
-          </div>
-        </VForm>
+  <v-card flat title="مدیریت دانش جو">
+    <template v-slot:text>
+      <div class="flex flex-col">
+        <v-text-field
+          v-model="search"
+          label="جستوجو"
+          prepend-inner-icon="mdi-magnify"
+          single-line
+          variant="outlined"
+        ></v-text-field>
+        <div v-show="selected.length !== 0" class="flex flex-row gap-2">
+          <div v-for="i in selected">{{ i }}</div>
+        </div>
       </div>
-    </div>
-  </div>
+    </template>
+    <v-data-table
+      v-model="selected"
+      :headers="headers"
+      :items="students"
+      :search="search"
+      show-select
+    >
+      <template v-slot:item.operations="{ item }">
+        <div class="flex flex-row">
+          <EditDialog v-model="isModalOpen">
+            <v-btn
+              color="grey-lighten-1"
+              icon="mdi-pencil"
+              variant="text"
+              @click="openModal('edit', item)"
+            ></v-btn>
+          </EditDialog>
+          <RemoveDialog>
+            <v-btn
+              color="red-lighten-2"
+              icon="mdi-close-thick"
+              variant="text"
+              @click="openModal('remove', item)"
+            ></v-btn>
+          </RemoveDialog>
+        </div>
+      </template>
+      <template v-slot:item.active="{ item }">
+        <v-checkbox v-model="item.active" disabled>
+          <!--          {{ item.active ? "فعال" : "غیر فعال" }}-->
+        </v-checkbox>
+      </template>
+    </v-data-table>
+  </v-card>
 </template>
