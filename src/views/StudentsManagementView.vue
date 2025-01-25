@@ -67,7 +67,7 @@ const { resetForm } = useForm({
 </script>
 
 <template>
-  <div class="p-6">
+  <div>
     <h1 class="text-xl font-bold mb-4">جدول اطلاعات</h1>
     <button
       class="bg-blue-500 text-white px-4 py-2 rounded mb-4"

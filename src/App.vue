@@ -14,7 +14,7 @@ const toggleDrawer = () => {
 
 <template>
   <v-locale-provider rtl>
-    <v-app theme="light">
+    <v-app class="py-4" theme="light">
       <MainAppBar @toggleDrawer="toggleDrawer" />
       <NavigationDrawer v-model="isDrawerOpen" />
       <v-main>

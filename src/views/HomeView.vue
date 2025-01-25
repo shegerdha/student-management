@@ -1,5 +1,7 @@
 <script lang="ts" setup></script>
 
-<template>به سامانه نمایش اطلاعات دانشجویان خوش آمدید.</template>
+<template>
+  <div>به سامانه نمایش اطلاعات دانشجویان خوش آمدید.</div>
+</template>
 
 <style scoped></style>
