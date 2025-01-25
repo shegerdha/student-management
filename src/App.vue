@@ -4,7 +4,6 @@ import MainAppBar from "@/components/MainAppBar.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
 
 import { ref } from "vue";
-import links from "./routes/mainLinks";
 
 const isDrawerOpen = ref(false);
 
@@ -14,15 +13,15 @@ const toggleDrawer = () => {
 </script>
 
 <template>
-  <v-app theme="light">
-    <header>
+  <v-locale-provider rtl>
+    <v-app theme="light">
       <MainAppBar @toggleDrawer="toggleDrawer" />
       <NavigationDrawer v-model="isDrawerOpen" />
-    </header>
-    <v-main>
-      <RouterView />
-    </v-main>
-  </v-app>
+      <v-main>
+        <RouterView />
+      </v-main>
+    </v-app>
+  </v-locale-provider>
 </template>
 
 <style scoped>
