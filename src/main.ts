@@ -16,6 +16,8 @@ import lightTheme from "./themes/lightTheme";
 import darkTheme from "./themes/darkTheme";
 import "@mdi/font/css/materialdesignicons.css";
 
+import Vue3PersianDatetimePicker from "vue3-persian-datetime-picker";
+
 const app = createApp(App);
 const vuetify = createVuetify({
   icons: { defaultSet: "mdi" },
@@ -30,5 +32,21 @@ pinia.use(piniaPersist);
 app.use(vuetify);
 app.use(pinia);
 app.use(router);
+app.use(Vue3PersianDatetimePicker, {
+  name: "Vue3PersianDatetimePicker",
+  props: {
+    format: "YYYY-MM-DD HH:mm",
+    displayFormat: "jYYYY-jMM-jDD",
+    editable: false,
+    inputClass: "form-control my-custom-class-name",
+    placeholder: "Please select a date",
+    altFormat: "YYYY-MM-DD HH:mm",
+    color: "#00acc1",
+    autoSubmit: false,
+    //...
+    //... And whatever you want to set as default.
+    //...
+  },
+});
 
 app.mount("#app");

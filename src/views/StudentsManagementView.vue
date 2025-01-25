@@ -165,13 +165,17 @@ const { resetForm } = useForm({
           </div>
           <div class="mb-4">
             <label class="block mb-1">تاریخ تولد:</label>
-            <Field
+            <Vue3PersianDatetimePicker
               v-model="formData.birthDate"
-              as="input"
-              class="w-full border px-2 py-1 rounded"
               name="birthDate"
-              type="date"
             />
+            <!--            <Field-->
+            <!--              v-model="formData.birthDate"-->
+            <!--              as="input"-->
+            <!--              class="w-full border px-2 py-1 rounded"-->
+            <!--              name="birthDate"-->
+            <!--              type="date"-->
+            <!--            />-->
             <ErrorMessage class="text-red-500 text-sm" name="birthDate" />
           </div>
           <div class="flex justify-end">
