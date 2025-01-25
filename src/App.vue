@@ -9,7 +9,6 @@ import links from "./routes/mainLinks";
 const isDrawerOpen = ref(false);
 
 const toggleDrawer = () => {
-  debugger;
   isDrawerOpen.value = !isDrawerOpen.value;
 };
 </script>
