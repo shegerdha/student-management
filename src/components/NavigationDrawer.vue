@@ -1,6 +1,8 @@
 <script lang="ts" setup="">
 import { ref } from "vue";
 import links from "@/routes/mainLinks";
+import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const isDrawerOpen = defineModel<boolean>();
 const allLinks = ref(links);
@@ -8,7 +10,7 @@ const allLinks = ref(links);
 
 <template>
   <div>
-    <v-navigation-drawer :model-value="isDrawerOpen">
+    <v-navigation-drawer v-model="isDrawerOpen" expand-on-hover rail>
       <v-layout>
         <div class="flex flex-col flex-grow-1">
           <v-list-item
@@ -16,12 +18,13 @@ const allLinks = ref(links);
             :key="link.path"
             :to="link.path"
           >
-            <div class="flex flex-row gap-2">
-              <v-list-item-media>
-                <v-icon icon="mdi-link" />
-              </v-list-item-media>
-              <v-list-item-title>{{ link.label }}</v-list-item-title>
-            </div>
+            <template v-slot:prepend>
+              <v-icon v-if="typeof link.icon === 'string'"
+                >{{ link.icon }}
+              </v-icon>
+              <FontAwesomeIcon v-else :icon="link.icon" />
+            </template>
+            <v-list-item-title>{{ link.label }}</v-list-item-title>
           </v-list-item>
         </div>
       </v-layout>

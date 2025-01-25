@@ -75,14 +75,17 @@ const { resetForm } = useForm({
     >
       افزودن دانشجو
     </button>
-    <table class="w-full border-collapse border border-gray-300">
+    <v-data-table
+      :items="students"
+      class="w-full border-collapse border border-gray-300"
+    >
       <thead>
         <tr class="bg-gray-100">
           <th>ردیف</th>
           <th>نام و نام خانوادگی</th>
           <th>شماره دانشجویی</th>
           <th>ایمیل</th>
-          <th>فعال یا غیر فعال</th>
+          <th>فعال/غیر فعال</th>
           <th>تاریخ تولد</th>
           <th>عملیات</th>
         </tr>
@@ -106,10 +109,16 @@ const { resetForm } = useForm({
             >
               ویرایش
             </button>
+            <button
+              class="bg-red-500 text-white px-3 py-1 rounded mx-1"
+              @click="openModal('edit', student)"
+            >
+              حذف
+            </button>
           </td>
         </tr>
       </tbody>
-    </table>
+    </v-data-table>
 
     <div
       v-if="isModalOpen"
@@ -151,16 +160,16 @@ const { resetForm } = useForm({
             <ErrorMessage class="text-red-500 text-sm" name="email" />
           </div>
           <div class="mb-4">
-            <label class="block mb-1">فعال یا غیر فعال:</label>
-            <Field
+            <!--            <label class="block mb-1">فعال یا غیر فعال:</label>-->
+            <v-checkbox
               v-model="formData.active"
-              as="select"
               class="w-full border px-2 py-1 rounded"
-              name="active"
-            >
-              <option :value="true">فعال</option>
-              <option :value="false">غیر فعال</option>
-            </Field>
+              label="فعال"
+            />
+            <!--            <Field v-model="formData.active" as="select" name="active">-->
+            <!--              <option :value="true">فعال</option>-->
+            <!--              <option :value="false">غیر فعال</option>-->
+            <!--            </Field>-->
             <ErrorMessage class="text-red-500 text-sm" name="active" />
           </div>
           <div class="mb-4">

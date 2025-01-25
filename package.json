@@ -12,6 +12,8 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
     "@mdi/font": "^7.4.47",
     "@vee-validate/yup": "^4.15.0",
     "pinia": "^2.3.0",

@@ -5,7 +5,7 @@ import NavigationDrawer from "@/components/NavigationDrawer.vue";
 
 import { ref } from "vue";
 
-const isDrawerOpen = ref(false);
+const isDrawerOpen = ref(true);
 
 const toggleDrawer = () => {
   isDrawerOpen.value = !isDrawerOpen.value;
