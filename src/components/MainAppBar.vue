@@ -9,7 +9,7 @@ console.log("emit", emit);
       <v-app-bar-nav-icon @click="emit('toggleDrawer')"></v-app-bar-nav-icon>
     </template>
 
-    <v-app-bar-title>Photos</v-app-bar-title>
+    <v-app-bar-title>پیوند ها</v-app-bar-title>
 
     <template v-slot:append>
       <v-btn icon="mdi-dots-vertical"></v-btn>
