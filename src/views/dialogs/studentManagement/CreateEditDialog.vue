@@ -52,12 +52,12 @@ watch(
   { immediate: true },
 );
 
-// Watch for changes in the dialog's open state
+// watch if dialog changes
 watch(
   () => isCreateEditModalOpen.value,
   (isOpen) => {
     if (isOpen && !props.student) {
-      // If the dialog is opened for creating a new student, reset the form
+      // reset form in case of new student
       resetForm({
         values: {
           fullName: "",
