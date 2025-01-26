@@ -4,7 +4,7 @@ import { useForm, Field, ErrorMessage, Form as VForm } from "vee-validate";
 import { boolean, object, string } from "yup";
 import { toTypedSchema } from "@vee-validate/yup";
 import { useStudentsStore } from "@/stores/students";
-import EditDialog from "@/views/dialogs/studentManagement/EditDialog.vue";
+import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
 
 const studentsStore = useStudentsStore();
@@ -57,7 +57,7 @@ const closeModal = () => {
 const handleSubmit = (values) => {
   if (modalMode.value === "create") {
     studentsStore.add({ ...values, id: Date.now() });
-  } else if (modalMode.value === "EditDialog") {
+  } else if (modalMode.value === "CreateEditDialog") {
     studentsStore.edit(values);
   }
   closeModal();
@@ -94,6 +94,7 @@ const { resetForm } = useForm({
           <div v-for="i in selected">{{ i }}</div>
         </div>
       </div>
+      <CreateEditDialog mode="create"> </CreateEditDialog>
     </template>
     <v-data-table
       v-model="selected"
@@ -104,15 +105,11 @@ const { resetForm } = useForm({
     >
       <template v-slot:item.operations="{ item }">
         <div class="flex flex-row">
-          <EditDialog v-model="isModalOpen">
-            <v-btn
-              color="grey-lighten-1"
-              icon="mdi-pencil"
-              variant="text"
-              @click="openModal('edit', item)"
-            ></v-btn>
-          </EditDialog>
-          <RemoveDialog>
+          <CreateEditDialog
+            :mode="edit"
+            @click="openModal('edit', item)"
+          ></CreateEditDialog>
+          <RemoveDialog v-model="isModalOpen">
             <v-btn
               color="red-lighten-2"
               icon="mdi-close-thick"
