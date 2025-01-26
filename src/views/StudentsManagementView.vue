@@ -38,14 +38,23 @@ const handleConfirm = (index: number) => {
 
 const handleFormSubmit = (val: Student) => {
   if (editingStudentIndex.value !== null) {
+    console.log("Editing student at index:", editingStudentIndex.value);
     studentsStore.edit(val);
   } else {
-    debugger;
-    studentsStore.add({ ...val, id: students.value.length + 1 });
+    // find the latest ID
+    const latestId = students.reduce(
+      (max, student) => Math.max(max, student.id),
+      0,
+    );
+    // creating new student
+    const newStudent: Student = {
+      ...val,
+      id: latestId + 1,
+    };
+    studentsStore.add(newStudent);
   }
   handleCloseCreateEditDialog();
 };
-
 const openEditDialog = (index: number) => {
   editingStudentIndex.value = index;
   isCreateEditDialogOpen.value = true;
