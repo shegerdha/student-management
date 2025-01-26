@@ -1,17 +1,12 @@
 <script lang="ts" setup>
-import { ref, defineProps, defineEmits, watch } from "vue";
+import { ref, defineProps, defineModel, defineEmits, watch } from "vue";
 import Vue3PersianDatetimePicker from "vue3-persian-datetime-picker";
 import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
 
-const props = defineProps({
-  mode: String,
-  formData: Object,
-});
-
-const isCreateEditDialogOpen = defineModel();
-
-const emit = defineEmits(["submit"]);
+const isCreateEditModalOpen = defineModel("isCreateEditModalOpen");
+const compProps = defineProps(["index"]);
+const emit = defineEmits(["handleSubmit", "handleClose"]);
 
 const validationSchema = yup.object({
   fullName: yup.string().required("نام و نام خانوادگی الزامی است"),
@@ -37,25 +32,25 @@ const studentId = useField("studentId");
 const email = useField("email");
 const active = useField("active");
 const birthDate = useField("birthDate");
+//
+// watch(
+//   () => props.formData,
+//   (newData) => {
+//     if (newData) {
+//       resetForm({ values: newData });
+//     }
+//   },
+//   { deep: true, immediate: true },
+// );
 
-watch(
-  () => props.formData,
-  (newData) => {
-    if (newData) {
-      resetForm({ values: newData });
-    }
-  },
-  { deep: true, immediate: true },
-);
-
-const closeDialog = () => {
-  isCreateEditDialogOpen.value = false;
-};
+// const closeDialog = () => {
+//   isCreateEditDialogOpen.value = false;
+// };
 </script>
 
 <template>
   <div class="py-4">
-    <v-dialog max-width="600">
+    <v-dialog v-model="isCreateEditModalOpen" max-width="600">
       <template v-slot:activator="{ props: activatorProps }">
         <slot name="activator" v-bind="activatorProps"></slot>
       </template>
@@ -63,12 +58,13 @@ const closeDialog = () => {
       <template #default>
         <v-card>
           <v-card-title>
-            {{ mode === "edit" ? "ویرایش دانشجو" : "ایجاد دانشجو" }}
+            {{ !compProps.index ? "ویرایش دانشجو" : "ایجاد دانشجو" }}
+            index:{{ compProps.index }}
           </v-card-title>
           {{ values }}
 
           <v-card-text>
-            <form @submit="handleSubmit((values) => emit('submit', values))">
+            <form @submit="handleSubmit((val) => emit('handleSubmit', val))">
               <v-text-field
                 v-model="fullName"
                 label="نام و نام خانوادگی"
@@ -100,7 +96,7 @@ const closeDialog = () => {
               <p class="text-red-500 text-sm">{{ birthDate.errorMessage }}</p>
 
               <div class="flex justify-end mt-4">
-                <v-btn color="grey" @click="closeDialog">انصراف</v-btn>
+                <v-btn color="grey" @click="emit('handleClose')">انصراف</v-btn>
                 <v-btn color="blue" type="submit">ذخیره</v-btn>
               </div>
             </form>

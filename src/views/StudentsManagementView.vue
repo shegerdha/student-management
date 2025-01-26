@@ -10,6 +10,7 @@ const students = studentsStore.students;
 const search = ref("");
 const selected = ref([]);
 const isDialogOpen = ref<Boolean>(false);
+const isCreateEditDialogOpen = ref<Boolean>(false);
 
 const headers = ref([
   { key: "id", title: "ردیف" },
@@ -25,8 +26,16 @@ const handleCloseDialog = () => {
   isDialogOpen.value = false;
 };
 
+const handleCloseCreateEditDialog = () => {
+  isCreateEditDialogOpen.value = false;
+};
+
 const handleConfirm = (index: number) => {
   studentsStore.remove(index);
+};
+
+const handleFormSubmit = (val) => {
+  console.log("val", val);
 };
 </script>
 
@@ -44,9 +53,20 @@ const handleConfirm = (index: number) => {
         ></v-text-field>
       </div>
 
-      <CreateEditDialog>
-        <template v-slot:activator>
-          <v-btn prepend-icon="mdi-plus" variant="text">ایجاد دانشجو</v-btn>
+      <CreateEditDialog
+        v-model:isCreateEditModalOpen="isCreateEditDialogOpen"
+        :index="null"
+        @handleClose="handleCloseCreateEditDialog"
+        @handleSubmit="handleFormSubmit"
+      >
+        <template v-slot:activator="props">
+          <v-btn
+            prepend-icon="mdi-plus"
+            v-bind="props.activatorProps"
+            variant="text"
+            @click="isCreateEditDialogOpen = true"
+            >ایجاد دانشجو
+          </v-btn>
         </template>
       </CreateEditDialog>
     </template>
@@ -61,12 +81,19 @@ const handleConfirm = (index: number) => {
       <!-- customizing columns using key names for example operations key in the header's column-->
       <template v-slot:item.operations="allProps">
         <div class="flex flex-row">
-          <CreateEditDialog>
-            <template v-slot:activator>
+          <CreateEditDialog
+            v-model:isCreateEditModalOpen="isCreateEditDialogOpen"
+            :index="allProps.index"
+            @handleClose="handleCloseCreateEditDialog"
+            @handleSubmit="handleFormSubmit"
+          >
+            <template v-slot:activator="props">
               <v-btn
                 color="grey-lighten-1"
                 icon="mdi-pencil"
+                v-bind="props.activatorProps"
                 variant="text"
+                @click="isCreateEditDialogOpen = true"
               ></v-btn>
             </template>
           </CreateEditDialog>
