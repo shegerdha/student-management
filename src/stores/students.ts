@@ -46,9 +46,9 @@ export const useStudentsStore = defineStore(
       students.value.push(newStudent);
     }
 
-    function remove(index: number) {
-      students.value = students.value.filter((student) => student.id !== index);
-      console.log(students.value);
+    function remove(id: number) {
+      console.log("Removing student with id:", id);
+      students.value = students.value.filter((student) => student.id !== id); // This is reactive
     }
 
     return { students, edit, add, remove };

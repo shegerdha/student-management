@@ -32,8 +32,10 @@ const handleCloseCreateEditDialog = () => {
   editingStudentIndex.value = null;
 };
 
-const handleConfirm = (index: number) => {
-  studentsStore.remove(index);
+const handleConfirm = (id: number) => {
+  console.log("Removing student with id:", id); // Debug: Log the id
+  studentsStore.remove(id);
+  isDialogOpen.value = false; // Close the modal
 };
 
 const handleFormSubmit = (val: Student) => {
