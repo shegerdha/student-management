@@ -1,8 +1,5 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import { useForm, Field, ErrorMessage, Form as VForm } from "vee-validate";
-import { boolean, object, string } from "yup";
-import { toTypedSchema } from "@vee-validate/yup";
 import { useStudentsStore } from "@/stores/students";
 import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
@@ -23,6 +20,7 @@ const headers = ref([
   { key: "birthDate", title: "تاریخ تولد" },
   { key: "operations", title: "عملیات" },
 ]);
+
 const formData = reactive({
   id: 0,
   fullName: "",
@@ -57,45 +55,39 @@ const closeModal = () => {
 const handleSubmit = (values) => {
   if (modalMode.value === "create") {
     studentsStore.add({ ...values, id: Date.now() });
-  } else if (modalMode.value === "CreateEditDialog") {
+  } else if (modalMode.value === "edit") {
     studentsStore.edit(values);
   }
   closeModal();
 };
-
-const validationSchema = toTypedSchema(
-  object({
-    fullName: string().required("نام و نام خانوادگی الزامی است"),
-    studentId: string().required("شماره دانشجویی الزامی است"),
-    email: string().email().required("ایمیل الزامی است"),
-    active: boolean().required("الزامی است"),
-    birthDate: string().required("تاریخ تولد الزامی است"),
-  }),
-);
-
-const { resetForm } = useForm({
-  validationSchema,
-  initialValues: formData,
-});
 </script>
 
 <template>
-  <v-card flat title="مدیریت دانش جو">
+  <v-card flat title="مدیریت دانشجو">
     <template v-slot:text>
       <div class="flex flex-col">
         <v-text-field
           v-model="search"
-          label="جستوجو"
+          label="جستجو"
           prepend-inner-icon="mdi-magnify"
           single-line
           variant="outlined"
         ></v-text-field>
-        <div v-show="selected.length !== 0" class="flex flex-row gap-2">
-          <div v-for="i in selected">{{ i }}</div>
-        </div>
       </div>
-      <CreateEditDialog mode="create"> </CreateEditDialog>
+
+      <CreateEditDialog mode="create" @submit="handleSubmit">
+        <template v-slot:activator>
+          <v-btn
+            prepend-icon="mdi-plus"
+            variant="text"
+            @click="openModal('create')"
+          >
+            ایجاد دانشجو
+          </v-btn>
+        </template>
+      </CreateEditDialog>
     </template>
+
     <v-data-table
       v-model="selected"
       :headers="headers"
@@ -106,9 +98,20 @@ const { resetForm } = useForm({
       <template v-slot:item.operations="{ item }">
         <div class="flex flex-row">
           <CreateEditDialog
-            :mode="edit"
-            @click="openModal('edit', item)"
-          ></CreateEditDialog>
+            :form-data="item"
+            :mode="'edit'"
+            @submit="handleSubmit"
+          >
+            <template v-slot:activator>
+              <v-btn
+                color="grey-lighten-1"
+                icon="mdi-pencil"
+                variant="text"
+                @click="openModal('edit', item)"
+              ></v-btn>
+            </template>
+          </CreateEditDialog>
+
           <RemoveDialog v-model="isModalOpen">
             <v-btn
               color="red-lighten-2"
@@ -119,10 +122,9 @@ const { resetForm } = useForm({
           </RemoveDialog>
         </div>
       </template>
+
       <template v-slot:item.active="{ item }">
-        <v-checkbox v-model="item.active" disabled>
-          <!--          {{ item.active ? "فعال" : "غیر فعال" }}-->
-        </v-checkbox>
+        <v-checkbox v-model="item.active" disabled></v-checkbox>
       </template>
     </v-data-table>
   </v-card>
