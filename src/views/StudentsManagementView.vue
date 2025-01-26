@@ -83,7 +83,7 @@ const handleFormSubmit = (val) => {
         <div class="flex flex-row">
           <CreateEditDialog
             v-model:isCreateEditModalOpen="isCreateEditDialogOpen"
-            :index="allProps.index"
+            :student="allProps.item"
             @handleClose="handleCloseCreateEditDialog"
             @handleSubmit="handleFormSubmit"
           >

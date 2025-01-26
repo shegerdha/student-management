@@ -5,9 +5,10 @@ import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
 
 const isCreateEditModalOpen = defineModel("isCreateEditModalOpen");
-const compProps = defineProps(["index"]);
+const compProps = defineProps(["student"]);
 const emit = defineEmits(["handleSubmit", "handleClose"]);
 
+console.log("student:", student);
 const validationSchema = yup.object({
   fullName: yup.string().required("نام و نام خانوادگی الزامی است"),
   studentId: yup.string().required("شماره دانشجویی الزامی است"),
@@ -64,7 +65,7 @@ const birthDate = useField("birthDate");
           {{ values }}
 
           <v-card-text>
-            <form @submit="handleSubmit((val) => emit('handleSubmit', val))">
+            <form>
               <v-text-field
                 v-model="fullName"
                 label="نام و نام خانوادگی"
@@ -97,7 +98,11 @@ const birthDate = useField("birthDate");
 
               <div class="flex justify-end mt-4">
                 <v-btn color="grey" @click="emit('handleClose')">انصراف</v-btn>
-                <v-btn color="blue" type="submit">ذخیره</v-btn>
+                <v-btn
+                  color="blue"
+                  @submit="handleSubmit((val) => emit('handleSubmit', val))"
+                  >ذخیره
+                </v-btn>
               </div>
             </form>
           </v-card-text>
