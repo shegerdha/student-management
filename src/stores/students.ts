@@ -42,6 +42,7 @@ export const useStudentsStore = defineStore(
     }
 
     function add(newStudent: Student) {
+      debugger;
       students.value.push(newStudent);
     }
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import { type Student, useStudentsStore } from "@/stores/students";
 import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
@@ -9,8 +9,9 @@ const students = studentsStore.students;
 
 const search = ref("");
 const selected = ref([]);
-const isDialogOpen = ref<Boolean>(false);
-const isCreateEditDialogOpen = ref<Boolean>(false);
+const isDialogOpen = ref(false);
+const isCreateEditDialogOpen = ref(false);
+const editingStudentIndex = ref<number | null>(null);
 
 const headers = ref([
   { key: "id", title: "ردیف" },
@@ -28,14 +29,26 @@ const handleCloseDialog = () => {
 
 const handleCloseCreateEditDialog = () => {
   isCreateEditDialogOpen.value = false;
+  editingStudentIndex.value = null;
 };
 
 const handleConfirm = (index: number) => {
   studentsStore.remove(index);
 };
 
-const handleFormSubmit = (val) => {
-  console.log("val", val);
+const handleFormSubmit = (val: Student) => {
+  if (editingStudentIndex.value !== null) {
+    studentsStore.edit(val);
+  } else {
+    debugger;
+    studentsStore.add({ ...val, id: students.value.length + 1 });
+  }
+  handleCloseCreateEditDialog();
+};
+
+const openEditDialog = (index: number) => {
+  editingStudentIndex.value = index;
+  isCreateEditDialogOpen.value = true;
 };
 </script>
 
@@ -55,7 +68,9 @@ const handleFormSubmit = (val) => {
 
       <CreateEditDialog
         v-model:isCreateEditModalOpen="isCreateEditDialogOpen"
-        :index="null"
+        :student="
+          editingStudentIndex !== null ? students[editingStudentIndex] : null
+        "
         @handleClose="handleCloseCreateEditDialog"
         @handleSubmit="handleFormSubmit"
       >
@@ -78,29 +93,18 @@ const handleFormSubmit = (val) => {
       :search="search"
       show-select
     >
-      <!-- customizing columns using key names for example operations key in the header's column-->
-      <template v-slot:item.operations="allProps">
+      <template v-slot:item.operations="{ index }">
         <div class="flex flex-row">
-          <CreateEditDialog
-            v-model:isCreateEditModalOpen="isCreateEditDialogOpen"
-            :student="allProps.item"
-            @handleClose="handleCloseCreateEditDialog"
-            @handleSubmit="handleFormSubmit"
-          >
-            <template v-slot:activator="props">
-              <v-btn
-                color="grey-lighten-1"
-                icon="mdi-pencil"
-                v-bind="props.activatorProps"
-                variant="text"
-                @click="isCreateEditDialogOpen = true"
-              ></v-btn>
-            </template>
-          </CreateEditDialog>
+          <v-btn
+            color="grey-lighten-1"
+            icon="mdi-pencil"
+            variant="text"
+            @click="openEditDialog(index)"
+          ></v-btn>
 
           <RemoveDialog
             v-model:isModalOpen="isDialogOpen"
-            :index="allProps.index"
+            :index="students[index].id"
             @handleClose="handleCloseDialog"
             @handleConfirm="handleConfirm"
           >
