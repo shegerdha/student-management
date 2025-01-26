@@ -23,7 +23,7 @@ const validationSchema = yup.object({
 
 const { handleSubmit, resetForm } = useForm({
   validationSchema,
-  initialValues: props.formData || {
+  initialValues: {
     fullName: "",
     studentId: "",
     email: "",
@@ -69,31 +69,31 @@ const closeDialog = () => {
           <v-card-text>
             <form @submit="handleSubmit((values) => emit('submit', values))">
               <v-text-field
-                v-model="fullName.value"
+                v-model="fullName"
                 label="نام و نام خانوادگی"
                 required
               ></v-text-field>
               <p class="text-red-500 text-sm">{{ fullName.errorMessage }}</p>
 
               <v-text-field
-                v-model="studentId.value"
+                v-model="studentId"
                 label="شماره دانشجویی"
                 required
               ></v-text-field>
               <p class="text-red-500 text-sm">{{ studentId.errorMessage }}</p>
 
               <v-text-field
-                v-model="email.value"
+                v-model="email"
                 label="ایمیل"
                 required
               ></v-text-field>
               <p class="text-red-500 text-sm">{{ email.errorMessage }}</p>
 
-              <v-checkbox v-model="active.value" label="فعال"></v-checkbox>
+              <v-checkbox v-model="active" label="فعال"></v-checkbox>
               <p class="text-red-500 text-sm">{{ active.errorMessage }}</p>
 
               <Vue3PersianDatetimePicker
-                v-model="birthDate.value"
+                v-model="birthDate"
                 label="تاریخ تولد"
               ></Vue3PersianDatetimePicker>
               <p class="text-red-500 text-sm">{{ birthDate.errorMessage }}</p>

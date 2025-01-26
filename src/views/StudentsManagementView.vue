@@ -51,14 +51,23 @@ const openModal = (mode, student = null) => {
 };
 
 const closeModal = () => {
-  isDialogOpen.value = false;
+  if (modalMode === "remove") isRemoveDialogOpen.value = false;
+  else isCreateEditDialogOpen.value = false;
 };
 
-const handleSubmit = (values) => {
+const handleCreateEdit = (values) => {
   if (modalMode.value === "create") {
     studentsStore.add({ ...values, id: Date.now() });
   } else if (modalMode.value === "edit") {
     studentsStore.edit(values);
+  }
+  closeModal();
+};
+
+const handleRemove = (values) => {
+  console.log("correct event");
+  if (modalMode.value === "remove") {
+    studentsStore.remove(values);
   }
   closeModal();
 };
@@ -120,7 +129,11 @@ const handleSubmit = (values) => {
             </template>
           </CreateEditDialog>
 
-          <RemoveDialog v-model="isRemoveDialogOpen">
+          <RemoveDialog
+            v-model="isRemoveDialogOpen"
+            @close="closeModal()"
+            @conirm="handleRemove(item)"
+          >
             <template v-slot:activator="props">
               <v-btn
                 color="red-lighten-2"

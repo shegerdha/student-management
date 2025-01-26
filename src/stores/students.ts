@@ -45,7 +45,11 @@ export const useStudentsStore = defineStore(
       students.value.push(newStudent);
     }
 
-    return { students, edit, add };
+    function remove(newStudent: Student) {
+      students.value.filter((student) => student.id !== newStudent.id);
+    }
+
+    return { students, edit, add, remove };
   },
   {
     persist: {
