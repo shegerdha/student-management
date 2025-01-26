@@ -113,12 +113,14 @@ const handleSubmit = (values) => {
           </CreateEditDialog>
 
           <RemoveDialog v-model="isModalOpen">
-            <v-btn
-              color="red-lighten-2"
-              icon="mdi-close-thick"
-              variant="text"
-              @click="openModal('remove', item)"
-            ></v-btn>
+            <template v-slot:activator>
+              <v-btn
+                color="red-lighten-2"
+                icon="mdi-close-thick"
+                variant="text"
+                @click="openModal('remove', item)"
+              ></v-btn>
+            </template>
           </RemoveDialog>
         </div>
       </template>
