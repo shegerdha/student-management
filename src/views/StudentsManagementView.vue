@@ -7,7 +7,8 @@ import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
 const studentsStore = useStudentsStore();
 const students = studentsStore.students;
 
-const isModalOpen = ref(false);
+const isCreateEditDialogOpen = ref(false);
+const isRemoveDialogOpen = ref(false);
 const modalMode = ref("create");
 const search = ref("");
 const selected = ref([]);
@@ -32,7 +33,8 @@ const formData = reactive({
 
 const openModal = (mode, student = null) => {
   modalMode.value = mode;
-  isModalOpen.value = true;
+  if (mode === "remove") isRemoveDialogOpen.value = true;
+  else isCreateEditDialogOpen.value = true;
 
   if (student) {
     Object.assign(formData, JSON.parse(JSON.stringify(student)));
@@ -49,7 +51,7 @@ const openModal = (mode, student = null) => {
 };
 
 const closeModal = () => {
-  isModalOpen.value = false;
+  isDialogOpen.value = false;
 };
 
 const handleSubmit = (values) => {
@@ -75,7 +77,12 @@ const handleSubmit = (values) => {
         ></v-text-field>
       </div>
 
-      <CreateEditDialog mode="create" @submit="handleSubmit">
+      <CreateEditDialog
+        v-model="isCreateEditDialogOpen"
+        :formData="formData"
+        mode="create"
+        @submit="handleSubmit"
+      >
         <template v-slot:activator>
           <v-btn
             prepend-icon="mdi-plus"
@@ -98,6 +105,7 @@ const handleSubmit = (values) => {
       <template v-slot:item.operations="{ item }">
         <div class="flex flex-row">
           <CreateEditDialog
+            v-model="isCreateEditDialogOpen"
             :form-data="item"
             :mode="'edit'"
             @submit="handleSubmit"
@@ -112,11 +120,12 @@ const handleSubmit = (values) => {
             </template>
           </CreateEditDialog>
 
-          <RemoveDialog v-model="isModalOpen">
-            <template v-slot:activator>
+          <RemoveDialog v-model="isRemoveDialogOpen">
+            <template v-slot:activator="props">
               <v-btn
                 color="red-lighten-2"
                 icon="mdi-close-thick"
+                v-bind="props.activatorProps"
                 variant="text"
                 @click="openModal('remove', item)"
               ></v-btn>

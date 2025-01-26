@@ -1,12 +1,11 @@
 <script setup>
 import { ref, defineProps, defineEmits, watch } from "vue";
 
-const isDialogOpen = ref(false);
-
 const props = defineProps({
   modelValue: Boolean, // v-model binding
 });
 const emit = defineEmits(["update:modelValue", "confirm"]);
+const isRemoveDialogOpen = defineModel();
 
 const dialog = ref(false);
 
@@ -25,7 +24,7 @@ const closeDialog = () => {
 
 <template>
   <div class="py-4">
-    <v-dialog v-model="isDialogOpen" max-width="600">
+    <v-dialog v-model="isRemoveDialogOpen" max-width="600">
       <template v-slot:activator="{ props: activatorProps }">
         <slot name="activator" v-bind="activatorProps"></slot>
       </template>
