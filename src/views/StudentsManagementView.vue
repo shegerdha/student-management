@@ -1,75 +1,32 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import { useStudentsStore } from "@/stores/students";
+import { type Student, useStudentsStore } from "@/stores/students";
 import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
 
 const studentsStore = useStudentsStore();
 const students = studentsStore.students;
 
-const isCreateEditDialogOpen = ref(false);
-const isRemoveDialogOpen = ref(false);
-const modalMode = ref("create");
 const search = ref("");
 const selected = ref([]);
+const isDialogOpen = ref<Boolean>(false);
+
 const headers = ref([
   { key: "id", title: "ردیف" },
   { key: "fullName", title: "نام و نام خانوادگی" },
   { key: "studentId", title: "شماره دانشجویی" },
   { key: "email", title: "ایمیل" },
-  { key: "active", title: "فعال" },
+  { key: "activeStatus", title: "فعال" },
   { key: "birthDate", title: "تاریخ تولد" },
   { key: "operations", title: "عملیات" },
 ]);
 
-const formData = reactive({
-  id: 0,
-  fullName: "",
-  studentId: "",
-  email: "",
-  active: true,
-  birthDate: "",
-});
-
-const openModal = (mode, student = null) => {
-  modalMode.value = mode;
-  if (mode === "remove") isRemoveDialogOpen.value = true;
-  else isCreateEditDialogOpen.value = true;
-
-  if (student) {
-    Object.assign(formData, JSON.parse(JSON.stringify(student)));
-  } else {
-    Object.assign(formData, {
-      id: 0,
-      fullName: "",
-      studentId: "",
-      email: "",
-      active: true,
-      birthDate: "",
-    });
-  }
+const handleCloseDialog = () => {
+  isDialogOpen.value = false;
 };
 
-const closeModal = () => {
-  if (modalMode === "remove") isRemoveDialogOpen.value = false;
-  else isCreateEditDialogOpen.value = false;
-};
-
-const handleCreateEdit = (values) => {
-  if (modalMode.value === "create") {
-    studentsStore.add({ ...values, id: Date.now() });
-  } else if (modalMode.value === "edit") {
-    studentsStore.edit(values);
-  }
-  closeModal();
-};
-
-const handleRemove = (values) => {
-  console.log("correct event");
-  if (modalMode.value === "remove") {
-    studentsStore.remove(values);
-  }
-  closeModal();
+const handleConfirm = (index: number) => {
+  studentsStore.remove(index);
 };
 </script>
 
@@ -80,26 +37,16 @@ const handleRemove = (values) => {
         <v-text-field
           v-model="search"
           label="جستجو"
+          placeholder="در هر فیلدی جست و جو کنید"
           prepend-inner-icon="mdi-magnify"
           single-line
           variant="outlined"
         ></v-text-field>
       </div>
 
-      <CreateEditDialog
-        v-model="isCreateEditDialogOpen"
-        :formData="formData"
-        mode="create"
-        @submit="handleSubmit"
-      >
+      <CreateEditDialog>
         <template v-slot:activator>
-          <v-btn
-            prepend-icon="mdi-plus"
-            variant="text"
-            @click="openModal('create')"
-          >
-            ایجاد دانشجو
-          </v-btn>
+          <v-btn prepend-icon="mdi-plus" variant="text">ایجاد دانشجو</v-btn>
         </template>
       </CreateEditDialog>
     </template>
@@ -111,28 +58,24 @@ const handleRemove = (values) => {
       :search="search"
       show-select
     >
-      <template v-slot:item.operations="{ item }">
+      <!-- customizing columns using key names for example operations key in the header's column-->
+      <template v-slot:item.operations="allProps">
         <div class="flex flex-row">
-          <CreateEditDialog
-            v-model="isCreateEditDialogOpen"
-            :form-data="item"
-            :mode="'edit'"
-            @submit="handleSubmit"
-          >
+          <CreateEditDialog>
             <template v-slot:activator>
               <v-btn
                 color="grey-lighten-1"
                 icon="mdi-pencil"
                 variant="text"
-                @click="openModal('edit', item)"
               ></v-btn>
             </template>
           </CreateEditDialog>
 
           <RemoveDialog
-            v-model="isRemoveDialogOpen"
-            @close="closeModal()"
-            @conirm="handleRemove(item)"
+            v-model:isModalOpen="isDialogOpen"
+            :index="allProps.index"
+            @handleClose="handleCloseDialog"
+            @handleConfirm="handleConfirm"
           >
             <template v-slot:activator="props">
               <v-btn
@@ -140,14 +83,14 @@ const handleRemove = (values) => {
                 icon="mdi-close-thick"
                 v-bind="props.activatorProps"
                 variant="text"
-                @click="openModal('remove', item)"
+                @click="isDialogOpen = true"
               ></v-btn>
             </template>
           </RemoveDialog>
         </div>
       </template>
 
-      <template v-slot:item.active="{ item }">
+      <template v-slot:item.activeStatus="{ item }">
         <v-checkbox v-model="item.active" disabled></v-checkbox>
       </template>
     </v-data-table>

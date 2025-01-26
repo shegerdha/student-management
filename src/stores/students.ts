@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-type Student = {
+export type Student = {
   id: number;
   fullName: string;
   studentId: string;
@@ -45,8 +45,9 @@ export const useStudentsStore = defineStore(
       students.value.push(newStudent);
     }
 
-    function remove(newStudent: Student) {
-      students.value.filter((student) => student.id !== newStudent.id);
+    function remove(index: number) {
+      students.value = students.value.filter((student) => student.id !== index);
+      console.log(students.value);
     }
 
     return { students, edit, add, remove };

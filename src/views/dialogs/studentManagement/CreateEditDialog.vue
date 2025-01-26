@@ -21,7 +21,7 @@ const validationSchema = yup.object({
   birthDate: yup.string().required("تاریخ تولد الزامی است"),
 });
 
-const { handleSubmit, resetForm } = useForm({
+const { handleSubmit, resetForm, values } = useForm({
   validationSchema,
   initialValues: {
     fullName: "",
@@ -55,7 +55,7 @@ const closeDialog = () => {
 
 <template>
   <div class="py-4">
-    <v-dialog v-model="isCreateEditDialogOpen" max-width="600">
+    <v-dialog max-width="600">
       <template v-slot:activator="{ props: activatorProps }">
         <slot name="activator" v-bind="activatorProps"></slot>
       </template>
@@ -65,6 +65,7 @@ const closeDialog = () => {
           <v-card-title>
             {{ mode === "edit" ? "ویرایش دانشجو" : "ایجاد دانشجو" }}
           </v-card-title>
+          {{ values }}
 
           <v-card-text>
             <form @submit="handleSubmit((values) => emit('submit', values))">
