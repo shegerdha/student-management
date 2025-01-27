@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { type Student, useStudentsStore } from "@/stores/students";
 import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
@@ -32,10 +32,10 @@ const handleCloseCreateEditDialog = () => {
   editingStudentIndex.value = null;
 };
 
-const handleConfirm = (id: number) => {
-  console.log("Removing student with id:", id); // Debug: Log the id
+const handleRemove = async (id: number) => {
   studentsStore.remove(id);
-  isDialogOpen.value = false; // Close the modal
+  await nextTick();
+  isDialogOpen.value = false;
 };
 
 const handleFormSubmit = (val: Student) => {
@@ -117,7 +117,7 @@ const openEditDialog = (index: number) => {
             v-model:isModalOpen="isDialogOpen"
             :index="students[index].id"
             @handleClose="handleCloseDialog"
-            @handleConfirm="handleConfirm"
+            @handleConfirm="handleRemove"
           >
             <template v-slot:activator="props">
               <v-btn

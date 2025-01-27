@@ -6,14 +6,13 @@ const props = defineProps(["index"]);
 const emit = defineEmits(["handleConfirm", "handleClose"]);
 
 const handleConfirm = () => {
-  console.log("Confirming removal of student with id:", props.index); // Debug: Log the id
   emit("handleConfirm", props.index);
-  isModalOpen.value = false; // Close the modal
+  isModalOpen.value = false;
 };
 
 const handleClose = () => {
   emit("handleClose");
-  isModalOpen.value = false; // Close the modal
+  isModalOpen.value = false;
 };
 </script>
 
@@ -25,6 +24,7 @@ const handleClose = () => {
 
     <v-card>
       <v-card-title>حذف دانشجو</v-card-title>
+      <v-card-text>index: {{ props.index }}</v-card-text>
       <v-card-text> آیا از حذف این دانشجو مطمئن هستید؟</v-card-text>
       <v-card-actions>
         <v-btn color="grey" @click="handleClose">انصراف</v-btn>

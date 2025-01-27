@@ -15,7 +15,7 @@ export const useStudentsStore = defineStore(
   () => {
     const students = ref<Student[]>([
       {
-        id: 1,
+        id: 0,
         fullName: "علی رضایی",
         studentId: "123456",
         email: "ali@example.com",
@@ -23,7 +23,7 @@ export const useStudentsStore = defineStore(
         birthDate: "2000-01-01",
       },
       {
-        id: 2,
+        id: 1,
         fullName: "زهرا محمدی",
         studentId: "654321",
         email: "zahra@example.com",
@@ -47,7 +47,6 @@ export const useStudentsStore = defineStore(
     }
 
     function remove(id: number) {
-      console.log("Removing student with id:", id);
       students.value = students.value.filter((student) => student.id !== id); // This is reactive
     }
 
