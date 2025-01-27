@@ -8,6 +8,7 @@ export type Student = {
   email: string;
   active: boolean;
   birthDate: string;
+  softDelete: boolean;
 };
 
 export const useStudentsStore = defineStore(
@@ -21,6 +22,7 @@ export const useStudentsStore = defineStore(
         email: "ali@example.com",
         active: true,
         birthDate: "2000-01-01",
+        softDelete: false,
       },
       {
         id: 1,
@@ -29,6 +31,7 @@ export const useStudentsStore = defineStore(
         email: "zahra@example.com",
         active: false,
         birthDate: "1999-12-31",
+        softDelete: false,
       },
     ]);
 
@@ -46,8 +49,11 @@ export const useStudentsStore = defineStore(
       students.value.push(newStudent);
     }
 
-    function remove(id: number) {
-      students.value = students.value.filter((student) => student.id !== id); // This is reactive
+    function remove(id: string) {
+      debugger;
+      students.value = students.value.filter(
+        (student) => student.studentId !== id,
+      );
     }
 
     return { students, edit, add, remove };

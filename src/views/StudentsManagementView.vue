@@ -15,6 +15,7 @@ const selected = ref([]);
 const isDialogOpen = ref(false);
 const isCreateEditDialogOpen = ref(false);
 const editingStudentIndex = ref<number | null>(null);
+const studentIdRef = ref<string>("");
 
 const headers = ref([
   { key: "id", title: "ردیف" },
@@ -35,9 +36,8 @@ const handleCloseCreateEditDialog = () => {
   editingStudentIndex.value = null;
 };
 
-const handleRemove = async (id: number) => {
-  studentsStore.remove(id);
-  await nextTick();
+const handleRemove = (id: string) => {
+  studentsStore.remove(studentIdRef.value);
   isDialogOpen.value = false;
 };
 
@@ -60,13 +60,14 @@ const handleFormSubmit = (val: Student) => {
   }
   handleCloseCreateEditDialog();
 };
+
 const openEditDialog = (index: number) => {
   editingStudentIndex.value = index;
   isCreateEditDialogOpen.value = true;
 };
 
 const openRemoveDialog = (index: number) => {
-  editingStudentIndex.value = index;
+  studentIdRef.value = students[index].studentId;
   isDialogOpen.value = true;
 };
 </script>
