@@ -61,6 +61,11 @@ const openEditDialog = (index: number) => {
   editingStudentIndex.value = index;
   isCreateEditDialogOpen.value = true;
 };
+
+const openRemoveDialog = (index: number) => {
+  editingStudentIndex.value = index;
+  isDialogOpen.value = true;
+};
 </script>
 
 <template>
@@ -76,6 +81,14 @@ const openEditDialog = (index: number) => {
           variant="outlined"
         ></v-text-field>
       </div>
+      <RemoveDialog
+        v-model:isModalOpen="isDialogOpen"
+        :index="editingStudentIndex"
+        @handleClose="handleCloseDialog"
+        @handleConfirm="handleRemove"
+      >
+        <template v-slot:activator="props"></template>
+      </RemoveDialog>
 
       <CreateEditDialog
         v-model:isCreateEditModalOpen="isCreateEditDialogOpen"
@@ -113,22 +126,12 @@ const openEditDialog = (index: number) => {
             @click="openEditDialog(index)"
           ></v-btn>
 
-          <RemoveDialog
-            v-model:isModalOpen="isDialogOpen"
-            :index="students[index].id"
-            @handleClose="handleCloseDialog"
-            @handleConfirm="handleRemove"
-          >
-            <template v-slot:activator="props">
-              <v-btn
-                color="red-lighten-2"
-                icon="mdi-close-thick"
-                v-bind="props.activatorProps"
-                variant="text"
-                @click="isDialogOpen = true"
-              ></v-btn>
-            </template>
-          </RemoveDialog>
+          <v-btn
+            color="red-lighten-2"
+            icon="mdi-close-thick"
+            variant="text"
+            @click="openRemoveDialog(index)"
+          ></v-btn>
         </div>
       </template>
 
