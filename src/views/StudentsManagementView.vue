@@ -85,6 +85,7 @@ const handleFormSubmit = (val: Student) => {
       0,
     );
     // creating new student
+    debugger;
     const newStudent: Student = {
       ...val,
       id: latestId + 1,
@@ -136,7 +137,7 @@ const openRemoveDialog = (index: number) => {
         @handleClose="handleCloseCreateEditDialog"
         @handleSubmit="handleFormSubmit"
       >
-        <template v-slot:activator="props"> </template>
+        <template v-slot:activator="props"></template>
       </CreateEditDialog>
       <v-btn
         prepend-icon="mdi-plus"
@@ -186,7 +187,9 @@ const openRemoveDialog = (index: number) => {
         </template>
         <template v-slot:item.birthDate="{ item }">
           <div>
-            {{ moment(item.birthDate, "YYYY-MM-DD").format("jYYYY/jMM/jDD") }}
+            {{
+              moment(item.birthDate, "YYYY-MM-DD HH:mm").format("jYYYY-jMM-jDD")
+            }}
           </div>
         </template>
       </v-data-table>

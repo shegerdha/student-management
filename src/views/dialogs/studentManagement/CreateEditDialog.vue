@@ -5,6 +5,7 @@ import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
 import { type Student } from "@/stores/data";
 import { boolean } from "yup";
+import moment from "moment-jalaali";
 
 const isCreateEditModalOpen = defineModel<boolean>("isCreateEditModalOpen");
 const props = defineProps<{ student: Student | null }>();
@@ -33,7 +34,7 @@ const { value: active, errorMessage: activeError } = useField("active");
 const { value: birthDate, errorMessage: birthDateError } =
   useField("birthDate");
 
-// Watch for changes in the `student` prop
+// watch for changes in the `student` prop
 watch(
   () => props.student,
   (newStudent) => {
@@ -56,24 +57,13 @@ watch(
   { immediate: true },
 );
 
-// watch if dialog changes
-watch(
-  () => isCreateEditModalOpen.value,
-  (isOpen) => {
-    if (isOpen && !props.student) {
-      // reset form in case of new student
-      resetForm({
-        values: {
-          fullName: "",
-          studentId: "",
-          email: "",
-          active: true,
-          birthDate: "",
-        },
-      });
-    }
-  },
-);
+const onDateChange = (selectedDate: string) => {
+  debugger;
+  const fixedDate = moment(selectedDate, "jYYYY-jMM-jDD").format(
+    "jYYYY-jMM-jDD",
+  );
+  console.log(fixedDate); // Ensures it remains in English digits
+};
 
 const onSubmit = handleSubmit((values) => {
   emit("handleSubmit", values);
@@ -116,6 +106,7 @@ const onSubmit = handleSubmit((values) => {
           <Vue3PersianDatetimePicker
             v-model="birthDate"
             label="تاریخ تولد"
+            @change="onDateChange"
           ></Vue3PersianDatetimePicker>
           <p class="text-red-500 text-sm">{{ birthDateError }}</p>
 
