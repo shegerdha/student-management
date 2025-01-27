@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import Vue3PersianDatetimePicker from "vue3-persian-datetime-picker";
 import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
-import type { Student } from "@/stores/students";
+import { type Student } from "@/stores/data";
 import { boolean } from "yup";
 
 const isCreateEditModalOpen = defineModel<boolean>("isCreateEditModalOpen");
