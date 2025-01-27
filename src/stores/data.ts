@@ -10,7 +10,7 @@ export type Student = {
   softDelete: boolean;
 };
 
-export const initStudents = ref<Student[]>([
+export const initStudents: Student[] = [
   {
     id: 0,
     fullName: "علی رضایی",
@@ -101,4 +101,4 @@ export const initStudents = ref<Student[]>([
     birthDate: "2003-02-12",
     softDelete: false,
   },
-]);
+];

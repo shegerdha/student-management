@@ -118,6 +118,7 @@ const openRemoveDialog = (index: number) => {
           variant="outlined"
         ></v-text-field>
       </div>
+
       <RemoveDialog
         v-model:isModalOpen="isDialogOpen"
         :index="editingStudentIndex"
@@ -147,6 +148,12 @@ const openRemoveDialog = (index: number) => {
       </CreateEditDialog>
       <v-btn v-print="'#printArea'" prepend-icon="mdi-printer" variant="text"
         >چاپ
+      </v-btn>
+      <v-btn
+        prepend-icon="mdi-lock-reset"
+        variant="text"
+        @click="studentsStore.reset"
+        >ریست فرم
       </v-btn>
     </template>
 

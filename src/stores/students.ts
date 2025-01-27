@@ -5,7 +5,7 @@ import { initStudents, type Student } from "./data";
 export const useStudentsStore = defineStore(
   "studentsStore",
   () => {
-    const students = initStudents;
+    const students = ref<Student[]>(initStudents);
 
     function edit(updatedStudent: Student) {
       const studentIndex = students.value.findIndex(
@@ -28,7 +28,11 @@ export const useStudentsStore = defineStore(
       );
     }
 
-    return { students, edit, add, remove };
+    function reset() {
+      students.value = initStudents;
+    }
+
+    return { students, edit, add, remove, reset };
   },
   {
     persist: {
