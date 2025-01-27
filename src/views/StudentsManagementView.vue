@@ -3,6 +3,9 @@ import { nextTick, ref } from "vue";
 import { type Student, useStudentsStore } from "@/stores/students";
 import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
+import moment from "moment-jalaali";
+
+moment.loadPersian({ usePersianDigits: true });
 
 const studentsStore = useStudentsStore();
 const students = studentsStore.students;
@@ -137,6 +140,11 @@ const openRemoveDialog = (index: number) => {
 
       <template v-slot:item.activeStatus="{ item }">
         <v-checkbox v-model="item.active" disabled></v-checkbox>
+      </template>
+      <template v-slot:item.birthDate="{ item }">
+        <div>
+          {{ moment(item.birthDate, "YYYY-MM-DD").format("jYYYY/jMM/jDD") }}
+        </div>
       </template>
     </v-data-table>
   </v-card>
