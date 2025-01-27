@@ -4,14 +4,18 @@ import Vue3PersianDatetimePicker from "vue3-persian-datetime-picker";
 import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
 import type { Student } from "@/stores/students";
+import { boolean } from "yup";
 
-const isCreateEditModalOpen = defineModel("isCreateEditModalOpen");
+const isCreateEditModalOpen = defineModel<boolean>("isCreateEditModalOpen");
 const props = defineProps<{ student: Student | null }>();
 const emit = defineEmits(["handleSubmit", "handleClose"]);
 
 const validationSchema = yup.object({
   fullName: yup.string().required("نام و نام خانوادگی الزامی است"),
-  studentId: yup.string().required("شماره دانشجویی الزامی است"),
+  studentId: yup
+    .string()
+    .matches(/^[0-9]+$/, "لطفا شماره وارد کنید")
+    .required("شماره دانشجویی الزامی است"),
   email: yup.string().email("ایمیل نامعتبر است").required("ایمیل الزامی است"),
   active: yup.boolean().required(),
   birthDate: yup.string().required("تاریخ تولد الزامی است"),
