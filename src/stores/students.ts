@@ -1,39 +1,11 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-
-export type Student = {
-  id: number;
-  fullName: string;
-  studentId: string;
-  email: string;
-  active: boolean;
-  birthDate: string;
-  softDelete: boolean;
-};
+import { initStudents, type Student } from "./data";
 
 export const useStudentsStore = defineStore(
   "studentsStore",
   () => {
-    const students = ref<Student[]>([
-      {
-        id: 0,
-        fullName: "علی رضایی",
-        studentId: "123456",
-        email: "ali@example.com",
-        active: true,
-        birthDate: "2000-01-01",
-        softDelete: false,
-      },
-      {
-        id: 1,
-        fullName: "زهرا محمدی",
-        studentId: "654321",
-        email: "zahra@example.com",
-        active: false,
-        birthDate: "1999-12-31",
-        softDelete: false,
-      },
-    ]);
+    const students = initStudents;
 
     function edit(updatedStudent: Student) {
       const studentIndex = students.value.findIndex(
