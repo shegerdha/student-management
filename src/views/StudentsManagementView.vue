@@ -136,16 +136,14 @@ const openRemoveDialog = (index: number) => {
         @handleClose="handleCloseCreateEditDialog"
         @handleSubmit="handleFormSubmit"
       >
-        <template v-slot:activator="props">
-          <v-btn
-            prepend-icon="mdi-plus"
-            v-bind="props.activatorProps"
-            variant="text"
-            @click="isCreateEditDialogOpen = true"
-            >ایجاد دانشجو
-          </v-btn>
-        </template>
+        <template v-slot:activator="props"> </template>
       </CreateEditDialog>
+      <v-btn
+        prepend-icon="mdi-plus"
+        variant="text"
+        @click="isCreateEditDialogOpen = true"
+        >ایجاد دانشجو
+      </v-btn>
       <v-btn v-print="'#printArea'" prepend-icon="mdi-printer" variant="text"
         >چاپ
       </v-btn>
