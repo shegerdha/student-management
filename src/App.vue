@@ -1,9 +1,68 @@
 <script lang="ts" setup>
+import { ref, provide } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import MainAppBar from "@/components/MainAppBar.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
 
-import { ref } from "vue";
+// all the components of syncfusion
+import {
+  DocumentEditorComponent as EjsDocumenteditor,
+  Print,
+  SfdtExport,
+  WordExport,
+  TextExport,
+  Selection,
+  Search,
+  Editor,
+  ImageResizer,
+  EditorHistory,
+  ContextMenu,
+  OptionsPane,
+  HyperlinkDialog,
+  TableDialog,
+  BookmarkDialog,
+  TableOfContentsDialog,
+  PageSetupDialog,
+  StyleDialog,
+  ListDialog,
+  ParagraphDialog,
+  BulletsAndNumberingDialog,
+  FontDialog,
+  TablePropertiesDialog,
+  BordersAndShadingDialog,
+  TableOptionsDialog,
+  CellOptionsDialog,
+  StylesDialog,
+} from "@syncfusion/ej2-vue-documenteditor";
+
+provide("DocumentEditor", [
+  Print,
+  SfdtExport,
+  WordExport,
+  TextExport,
+  Selection,
+  Search,
+  Editor,
+  ImageResizer,
+  EditorHistory,
+  ContextMenu,
+  OptionsPane,
+  HyperlinkDialog,
+  TableDialog,
+  BookmarkDialog,
+  TableOfContentsDialog,
+  PageSetupDialog,
+  StyleDialog,
+  ListDialog,
+  ParagraphDialog,
+  BulletsAndNumberingDialog,
+  FontDialog,
+  TablePropertiesDialog,
+  BordersAndShadingDialog,
+  TableOptionsDialog,
+  CellOptionsDialog,
+  StylesDialog,
+]);
 
 const isDrawerOpen = ref(true);
 
@@ -24,7 +83,18 @@ const toggleDrawer = () => {
   </v-locale-provider>
 </template>
 
+<!--styles for syncfusion document editor-->
 <style scoped>
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-lists/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-navigations/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-vue-documenteditor/styles/material.css";
+
 header {
   line-height: 1.5;
   max-height: 100vh;

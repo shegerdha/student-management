@@ -3,6 +3,7 @@ import "./assets/main.css";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import piniaPersist from "pinia-plugin-persistedstate";
+import print from "vue3-print-nb";
 
 import App from "./App.vue";
 import router from "./router";
@@ -29,6 +30,7 @@ const vuetify = createVuetify({
 const pinia = createPinia();
 pinia.use(piniaPersist);
 
+app.use(print);
 app.use(vuetify);
 app.use(pinia);
 app.use(router);

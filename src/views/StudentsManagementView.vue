@@ -1,9 +1,20 @@
 <script lang="ts" setup>
-import { nextTick, ref } from "vue";
-import { type Student, useStudentsStore } from "@/stores/students";
+import { nextTick, reactive, ref, onMounted, inject } from "vue";
+import { useStudentsStore } from "@/stores/students";
+import { type Student } from "@/stores/data";
 import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
 import moment from "moment-jalaali";
+
+const DocumentEditor = inject("DocumentEditor");
+import {
+  DocumentEditorContainerComponent as EjsDocumenteditorcontainer,
+  Toolbar,
+} from "@syncfusion/ej2-vue-documenteditor";
+
+const serviceUrl =
+  "https://ej2services.syncfusion.com/production/web-services/api/documenteditor/";
+const documenteditor = null;
 
 moment.loadPersian({ usePersianDigits: true });
 
@@ -17,6 +28,26 @@ const isCreateEditDialogOpen = ref(false);
 const editingStudentIndex = ref<number | null>(null);
 const studentIdRef = ref<string>("");
 
+// const printObj = reactive({
+//   id: "printArea",
+//   popTitle: "good print",
+//   extraCss:
+//     "https://www.google.com/css/css1.css, https://www.google.com/css/css2.css",
+//   extraHead: '<meta http-equiv="Content-Language" content="zh-cn"/>',
+//
+//   beforeOpenCallback(vue) {
+//     vue.printLoading = true;
+//     console.log("打开之前");
+//   },
+//   openCallback(vue) {
+//     vue.printLoading = false;
+//     console.log("执行了打印");
+//   },
+//   closeCallback(vue) {
+//     console.log("关闭了打印工具");
+//   },
+// });
+
 const headers = ref([
   { key: "id", title: "ردیف" },
   { key: "fullName", title: "نام و نام خانوادگی" },
@@ -26,6 +57,8 @@ const headers = ref([
   { key: "birthDate", title: "تاریخ تولد" },
   { key: "operations", title: "عملیات" },
 ]);
+
+// end of the refs
 
 const handleCloseDialog = () => {
   isDialogOpen.value = false;
@@ -112,41 +145,52 @@ const openRemoveDialog = (index: number) => {
           </v-btn>
         </template>
       </CreateEditDialog>
+      <v-btn v-print="'#printArea'" prepend-icon="mdi-printer" variant="text"
+        >چاپ
+      </v-btn>
     </template>
 
-    <v-data-table
-      v-model="selected"
-      :headers="headers"
-      :items="students"
-      :search="search"
-      show-select
-    >
-      <template v-slot:item.operations="{ index }">
-        <div class="flex flex-row">
-          <v-btn
-            color="grey-lighten-1"
-            icon="mdi-pencil"
-            variant="text"
-            @click="openEditDialog(index)"
-          ></v-btn>
+    <div id="printArea">
+      <v-data-table
+        v-model="selected"
+        :headers="headers"
+        :items="students"
+        :search="search"
+        show-select
+      >
+        <template v-slot:item.operations="{ index, item }">
+          <div class="flex flex-row">
+            <v-btn
+              color="grey-lighten-1"
+              icon="mdi-pencil"
+              variant="text"
+              @click="openEditDialog(index)"
+            ></v-btn>
 
-          <v-btn
-            color="red-lighten-2"
-            icon="mdi-close-thick"
-            variant="text"
-            @click="openRemoveDialog(index)"
-          ></v-btn>
-        </div>
-      </template>
+            <v-btn
+              color="red-lighten-2"
+              icon="mdi-close-thick"
+              variant="text"
+              @click="openRemoveDialog(index)"
+            ></v-btn>
+          </div>
+        </template>
 
-      <template v-slot:item.activeStatus="{ item }">
-        <v-checkbox v-model="item.active" disabled></v-checkbox>
-      </template>
-      <template v-slot:item.birthDate="{ item }">
-        <div>
-          {{ moment(item.birthDate, "YYYY-MM-DD").format("jYYYY/jMM/jDD") }}
-        </div>
-      </template>
-    </v-data-table>
+        <template v-slot:item.activeStatus="{ item }">
+          <v-checkbox v-model="item.active" disabled></v-checkbox>
+        </template>
+        <template v-slot:item.birthDate="{ item }">
+          <div>
+            {{ moment(item.birthDate, "YYYY-MM-DD").format("jYYYY/jMM/jDD") }}
+          </div>
+        </template>
+      </v-data-table>
+    </div>
+    <div>
+      <!--      <EjsDocumenteditorcontainer-->
+      <!--        :enableToolbar="true"-->
+      <!--        :serviceUrl="serviceUrl"-->
+      <!--      ></EjsDocumenteditorcontainer>-->
+    </div>
   </v-card>
 </template>
