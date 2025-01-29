@@ -5,16 +5,18 @@ import { type Student } from "@/stores/data";
 import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
 import moment from "moment-jalaali";
+import Vue3PrintNb from "vue3-print-nb";
 
-const DocumentEditor = inject("DocumentEditor");
-import {
-  DocumentEditorContainerComponent as EjsDocumenteditorcontainer,
-  Toolbar,
-} from "@syncfusion/ej2-vue-documenteditor";
-
-const serviceUrl =
-  "https://ej2services.syncfusion.com/production/web-services/api/documenteditor/";
-const documenteditor = null;
+//
+// const DocumentEditor = inject("DocumentEditor");
+// import {
+//   DocumentEditorContainerComponent as EjsDocumenteditorcontainer,
+//   Toolbar,
+// } from "@syncfusion/ej2-vue-documenteditor";
+//
+// const serviceUrl =
+//   "https://ej2services.syncfusion.com/production/web-services/api/documenteditor/";
+// const documenteditor = null;
 
 moment.loadPersian({ usePersianDigits: true });
 
@@ -22,31 +24,32 @@ const studentsStore = useStudentsStore();
 const students = studentsStore.students;
 
 const search = ref("");
+const printArea = ref(null);
 const selected = ref([]);
 const isDialogOpen = ref(false);
 const isCreateEditDialogOpen = ref(false);
 const editingStudentIndex = ref<number | null>(null);
 const studentIdRef = ref<string>("");
 
-// const printObj = reactive({
-//   id: "printArea",
-//   popTitle: "good print",
-//   extraCss:
-//     "https://www.google.com/css/css1.css, https://www.google.com/css/css2.css",
-//   extraHead: '<meta http-equiv="Content-Language" content="zh-cn"/>',
-//
-//   beforeOpenCallback(vue) {
-//     vue.printLoading = true;
-//     console.log("打开之前");
-//   },
-//   openCallback(vue) {
-//     vue.printLoading = false;
-//     console.log("执行了打印");
-//   },
-//   closeCallback(vue) {
-//     console.log("关闭了打印工具");
-//   },
-// });
+const printObj = reactive({
+  id: "printArea",
+  popTitle: "good print",
+  // extraCss:
+  //   "https://www.google.com/css/css1.css, https://www.google.com/css/css2.css",
+  extraHead: '<meta http-equiv="Content-Language" content="fa-IR"/>',
+  //
+  // beforeOpenCallback(vue) {
+  //   vue.printLoading = true;
+  //   console.log("打开之前");
+  // },
+  // openCallback(vue) {
+  //   vue.printLoading = false;
+  //   console.log("执行了打印");
+  // },
+  // closeCallback(vue) {
+  //   console.log("关闭了打印工具");
+  // },
+});
 
 const headers = ref([
   { key: "id", title: "ردیف" },
@@ -145,7 +148,7 @@ const openRemoveDialog = (index: number) => {
         @click="isCreateEditDialogOpen = true"
         >ایجاد دانشجو
       </v-btn>
-      <v-btn v-print="'#printArea'" prepend-icon="mdi-printer" variant="text"
+      <v-btn v-print="printObj" prepend-icon="mdi-printer" variant="text"
         >چاپ
       </v-btn>
       <v-btn
