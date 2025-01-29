@@ -5,7 +5,8 @@ import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
 import { type Student } from "@/stores/data";
 import { boolean } from "yup";
-import moment from "moment-jalaali";
+import moment from "moment";
+import "moment/locale/fa";
 
 const isCreateEditModalOpen = defineModel<boolean>("isCreateEditModalOpen");
 const props = defineProps<{ student: Student | null }>();
@@ -55,11 +56,10 @@ watch(
   { immediate: true },
 );
 
-const onDateChange = (selectedDate: string) => {
-  debugger;
-  const fixedDate = moment(selectedDate, "jYYYY-jMM-jDD").format(
-    "jYYYY-jMM-jDD",
-  );
+const onDateChange = (date: string) => {
+  if (!date) return;
+  const parsedDate = moment(date, "jYYYY/jMM/jDD", "fa");
+  birthDate.value = parsedDate.locale("en").format("YYYY-MM-DD");
 };
 
 const onSubmit = handleSubmit((values) => {
@@ -107,7 +107,7 @@ const onSubmit = handleSubmit((values) => {
           ></Vue3PersianDatetimePicker>
           <p class="text-red-500 text-sm">{{ birthDateError }}</p>
 
-          <div class="flex justify-end mt-4">
+          <div class="flex justify-end gap-2 mt-4">
             <v-btn color="grey" @click="emit('handleClose')">انصراف</v-btn>
             <v-btn color="blue" type="submit">ذخیره</v-btn>
           </div>

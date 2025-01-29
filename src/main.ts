@@ -40,7 +40,7 @@ app.use(Vue3PersianDatetimePicker, {
     format: "YYYY-MM-DD HH:mm",
     displayFormat: "jYYYY-jMM-jDD",
     editable: false,
-    inputClass: "form-control my-custom-class-name",
+    inputClass: "form-control main-persian-font",
     placeholder: "Please select a date",
     altFormat: "YYYY-MM-DD HH:mm",
     color: "#00acc1",

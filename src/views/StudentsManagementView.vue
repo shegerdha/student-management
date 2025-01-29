@@ -4,7 +4,7 @@ import { useStudentsStore } from "@/stores/students";
 import { type Student } from "@/stores/data";
 import CreateEditDialog from "@/views/dialogs/studentManagement/CreateEditDialog.vue";
 import RemoveDialog from "@/views/dialogs/studentManagement/RemoveDialog.vue";
-import moment from "moment-jalaali";
+import moment from "moment";
 import Vue3PrintNb from "vue3-print-nb";
 
 //
@@ -17,8 +17,6 @@ import Vue3PrintNb from "vue3-print-nb";
 // const serviceUrl =
 //   "https://ej2services.syncfusion.com/production/web-services/api/documenteditor/";
 // const documenteditor = null;
-
-moment.loadPersian({ usePersianDigits: true });
 
 const studentsStore = useStudentsStore();
 const students = studentsStore.students;
@@ -165,6 +163,7 @@ const openRemoveDialog = (index: number) => {
         :headers="headers"
         :items="students"
         :search="search"
+        items-per-page="5"
         show-select
       >
         <template v-slot:item.operations="{ index, item }">
@@ -191,7 +190,9 @@ const openRemoveDialog = (index: number) => {
         <template v-slot:item.birthDate="{ item }">
           <div>
             {{
-              moment(item.birthDate, "YYYY-MM-DD HH:mm").format("jYYYY-jMM-jDD")
+              moment(item.birthDate, "YYYY-MM-DD")
+                .locale("fa")
+                .format("YYYY/MM/DD")
             }}
           </div>
         </template>
