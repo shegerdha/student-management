@@ -39,10 +39,8 @@ watch(
   () => props.student,
   (newStudent) => {
     if (newStudent) {
-      // If editing, populate the form with the student's data
       resetForm({ values: newStudent });
     } else {
-      // If creating, reset the form to initial values
       resetForm({
         values: {
           fullName: "",
@@ -62,7 +60,6 @@ const onDateChange = (selectedDate: string) => {
   const fixedDate = moment(selectedDate, "jYYYY-jMM-jDD").format(
     "jYYYY-jMM-jDD",
   );
-  console.log(fixedDate); // Ensures it remains in English digits
 };
 
 const onSubmit = handleSubmit((values) => {
