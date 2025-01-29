@@ -23,13 +23,17 @@ export const useStudentsStore = defineStore(
 
     function remove(id: string) {
       debugger;
-      students.value = students.value.filter(
-        (student) => student.studentId !== id,
+      const index = students.value.findIndex(
+        (student) => student.studentId === id,
       );
+      if (index !== -1) {
+        students.value.splice(index, 1);
+      }
     }
 
     function reset() {
-      students.value = initStudents;
+      students.value.length = 0;
+      students.value.push(...initStudents);
     }
 
     return { students, edit, add, remove, reset };
