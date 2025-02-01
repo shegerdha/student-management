@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import links from "@/routes/mainLinks";
 import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const isDrawerOpen = defineModel<boolean>();
 const allLinks = ref(links);
@@ -22,7 +21,6 @@ const allLinks = ref(links);
               <v-icon v-if="typeof link.icon === 'string'"
                 >{{ link.icon }}
               </v-icon>
-              <FontAwesomeIcon v-else :icon="link.icon" />
             </template>
             <v-list-item-title>{{ link.label }}</v-list-item-title>
           </v-list-item>

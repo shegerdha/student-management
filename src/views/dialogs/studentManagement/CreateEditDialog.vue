@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import Vue3PersianDatetimePicker from "vue3-persian-datetime-picker";
 import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
@@ -16,10 +16,10 @@ const validationSchema = yup.object({
   fullName: yup.string().required("نام و نام خانوادگی الزامی است"),
   studentId: yup
     .string()
-    .matches(/^[0-9]+$/, "لطفا شماره وارد کنید")
+    .matches(/^[0-9۰-۹]+$/, "لطفا از کاراکترهای عددی استفاده کنید")
     .required("شماره دانشجویی الزامی است"),
   email: yup.string().email("ایمیل نامعتبر است").required("ایمیل الزامی است"),
-  active: yup.boolean().required(),
+  active: yup.boolean().required("تعیین وضعیت فعال بودن الزامی است"),
   birthDate: yup.string().required("تاریخ تولد الزامی است"),
 });
 
@@ -44,18 +44,39 @@ watch(
     } else {
       resetForm({
         values: {
-          fullName: "",
-          studentId: "",
-          email: "",
-          active: true,
-          birthDate: "",
+          fullName: null,
+          studentId: null,
+          email: null,
+          active: null,
+          birthDate: null,
         },
       });
     }
   },
-  { immediate: true },
+  { immediate: true }
 );
 
+watch(
+  () => isCreateEditModalOpen.value,
+  (newvalue) => {
+    if (!newvalue) {
+      setTimeout(
+        () =>
+          resetForm({
+            values: {
+              fullName: null,
+              studentId: null,
+              email: null,
+              active: null,
+              birthDate: null,
+            },
+          }),
+        100
+      );
+    }
+  },
+  { immediate: true }
+);
 const onDateChange = (date: string) => {
   if (!date) return;
   const parsedDate = moment(date, "jYYYY/jMM/jDD", "fa");
@@ -65,6 +86,8 @@ const onDateChange = (date: string) => {
 const onSubmit = handleSubmit((values) => {
   emit("handleSubmit", values);
 });
+
+const computeActiveIndeterminate = computed(() => active.value === null);
 </script>
 
 <template>
@@ -83,21 +106,23 @@ const onSubmit = handleSubmit((values) => {
           <v-text-field
             v-model="fullName"
             label="نام و نام خانوادگی"
-            required
           ></v-text-field>
           <p class="text-red-500 text-sm">{{ fullNameError }}</p>
 
           <v-text-field
             v-model="studentId"
             label="شماره دانشجویی"
-            required
           ></v-text-field>
           <p class="text-red-500 text-sm">{{ studentIdError }}</p>
 
-          <v-text-field v-model="email" label="ایمیل" required></v-text-field>
+          <v-text-field v-model="email" label="ایمیل"></v-text-field>
           <p class="text-red-500 text-sm">{{ emailError }}</p>
 
-          <v-checkbox v-model="active" label="فعال"></v-checkbox>
+          <v-checkbox
+            v-model="active"
+            :indeterminate="computeActiveIndeterminate"
+            label="فعال"
+          ></v-checkbox>
           <p class="text-red-500 text-sm">{{ activeError }}</p>
 
           <Vue3PersianDatetimePicker
